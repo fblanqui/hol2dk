@@ -1236,6 +1236,36 @@ and command = function
 
   | "abbrev"::_ -> wrong_nb_args()
 
+  | "divide"::args ->
+     let divide f =
+       let ext = Filename.extension f in
+       let b = Filename.remove_extension f in
+       let ic = open_in f in
+       let rev_requires = ref [] in
+       let n = ref 0 in
+       let size = ref 0 in
+       let max = 1000 in
+       let oc = ref stdout in
+       let open_new_file() =
+         close_out !oc; oc := open_out (b^string_of_int !n^ext); size := 0
+       in
+       let parse() =
+         let s = input_line ic in
+         Printf.fprintf !oc "%s\n" s;
+         size := !size + String.length s;
+         if s <> "" && s.[0] = '#' then rev_requires := s::!rev_requires;
+         if !size > max then open_new_file()
+       in
+       open_new_file();
+       begin
+         try while true do parse() done
+         with End_of_file -> ()
+       end;
+       close_out !oc;
+       close_in ic
+     in
+     List.iter divide args
+
   (* Single file generation (used neither in b.mk nor in Makefile). *)
   | f::args ->
      let r = range args in
