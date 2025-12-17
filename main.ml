@@ -1246,12 +1246,16 @@ and command = function
      let size = ref 0 in
      let oc = ref stdout in
      let open_new_file() =
-       close_out !oc; oc := open_out (b^string_of_int !n^ext); size := 0
+       close_out !oc;
+       incr n;
+       oc := open_out (b^string_of_int !n^ext);
+       size := 0
      in
      let parse() =
        let s = input_line ic in
        Printf.fprintf !oc "%s\n" s;
        size := !size + String.length s;
+       Printf.eprintf "%d\n" !size;
        if s <> "" && s.[0] = '#' then rev_requires := s::!rev_requires;
        if !size > max then open_new_file()
      in
