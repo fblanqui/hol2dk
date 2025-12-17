@@ -1244,7 +1244,7 @@ and command = function
        let rev_requires = ref [] in
        let n = ref 0 in
        let size = ref 0 in
-       let max = 1000 in
+       let max = 1_000_000 in
        let oc = ref stdout in
        let open_new_file() =
          close_out !oc; oc := open_out (b^string_of_int !n^ext); size := 0
