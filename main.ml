@@ -1251,12 +1251,20 @@ and command = function
        oc := open_out (b^string_of_int !n^ext);
        size := 0
      in
+     let map_thm_part = ref MapStr.empty in
+     let space = Str.regexp "[ \t]+" in
+     let _ = assert (Str.split space "a b c" = ["a";"b";"c"]) in
      let parse() =
        let s = input_line ic in
        Printf.fprintf !oc "%s\n" s;
        size := !size + String.length s;
-       Printf.eprintf "%d\n" !size;
-       if s <> "" && s.[0] = '#' then rev_requires := s::!rev_requires;
+       if s <> "" && s.[0] = '#' then rev_requires := s::!rev_requires
+       else if String.starts_with ~prefix:"thm" s then
+         begin
+           match Str.bounded_split space s 2 with
+           | _::thm::_ -> map_thm_part := MapStr.add thm !n !map_thm_part
+           | _ -> assert false
+         end;
        if !size > max then open_new_file()
      in
      open_new_file();
