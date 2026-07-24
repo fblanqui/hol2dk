@@ -9,6 +9,18 @@ REMOVE*)
 open Xprelude
 open Fusion
 
+(* HOL-Light types minus those defined in theory_hol.lp *)
+let types() =
+  let f (n,_) = match n with "bool" | "fun" -> false | _ -> true in
+  List.filter f (!the_type_constants)
+;;
+
+(* HOL-Light constants minus those defined in theory_hol.lp *)
+let constants() =
+  let f (n,_) = match n with "=" | "@" | "el" -> false | _ -> true in
+  List.filter f (!the_term_constants)
+;;
+
 (****************************************************************************)
 (* Ranges of proof indexes. *)
 (****************************************************************************)
@@ -621,7 +633,7 @@ let update_reserved =
   fun () ->
   reserved :=
     let s = List.fold_left add_name SetStr.empty !the_type_constants in
-    List.fold_left add_name s !the_term_constants
+    List.fold_left add_name s (!the_term_constants)
 ;;
 
 (* [rename_var rmap v] returns a variable with the same type as the one
@@ -1080,7 +1092,7 @@ let update_map_const_typ_vars_pos() =
             (tyvars b)
         in
         MapStr.add n ps map)
-      MapStr.empty (constants())
+      MapStr.empty (!the_term_constants)
 ;;
 
 let typ_var_pos_list = list_sep "; " (list_sep "," int);;

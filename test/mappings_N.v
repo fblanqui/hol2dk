@@ -160,7 +160,7 @@ Proof.
     + exact h.
 Qed.
 
-Lemma is_False P : (P = False) = ~ P.
+Lemma is_False P : (P = False) = (~ P).
 Proof.
   apply prop_ext; intro h.
   - rewrite h.
@@ -1337,7 +1337,7 @@ Proof. intros n; apply N.even_spec; exists n; reflexivity. Qed.
 Lemma odd_even : forall n, N.odd (2 * n) = false.
 Proof. intros n; rewrite <- N.negb_even, even_even; reflexivity. Qed.
 
-Lemma NEvenS: forall n: N, N.Even (N.succ n) = ~ N.Even n.
+Lemma NEvenS: forall n: N, N.Even (N.succ n) = (~ N.Even n).
 Proof.
   intro n.
   rewrite (prop_ext_eq (N.Even_succ n)).
@@ -1352,7 +1352,7 @@ Proof.
       + trivial.
 Qed.
 
-Lemma NOddS: forall n: N, N.Odd (N.succ n) = ~ N.Odd n.
+Lemma NOddS: forall n: N, N.Odd (N.succ n) = (~ N.Odd n).
 Proof.
   intro n.
   rewrite (prop_ext_eq (N.Odd_succ n)).

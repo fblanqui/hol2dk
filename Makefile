@@ -61,7 +61,7 @@ $(BASE_FILES:%=%.lp) &:
 	$(HOL2DK) sig $(BASE).lp
 
 $(BASE)_opam.lp:
-	$(HOL2DK) axm $(BASE).lp
+	$(HOL2DK) opam $(BASE).lp
 
 .PHONY: opam
 opam: $(BASE_FILES:%=%.v) $(BASE)_opam.v
@@ -69,6 +69,16 @@ opam: $(BASE_FILES:%=%.v) $(BASE)_opam.v
 .PHONY: clean-opam
 clean-opam:
 	-rm -f $(BASE)_opam.*
+
+.PHONY: theory
+theory: $(BASE)_theory.v
+
+$(BASE)_theory.lp:
+	$(HOL2DK) theory $(BASE).lp
+
+.PHONY: clean-theory
+clean-theory:
+	-rm -f $(BASE)_theory.*
 
 .PHONY: single
 single: $(BASE).lp
